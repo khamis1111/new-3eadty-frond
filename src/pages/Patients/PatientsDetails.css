@@ -1,0 +1,33 @@
+.tabs-list {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.x-ray {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 1055px) {
+    .patient-details .card-info {
+        flex: 1 !important;
+    }
+
+    .tabs-list {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+
+    .x-ray {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 765px) {
+    .card-user-info {
+        gap: 1rem;
+    }
+}
+
+.vertical-line {
+    width: 1px;
+    height: 35px;
+    background: rgba(128, 128, 128, 0.305);
+}
