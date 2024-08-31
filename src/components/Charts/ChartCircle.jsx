@@ -14,8 +14,8 @@ import {
 
 const ChartCircle = ({ UsersPaid, UsersNotPaid }) => {
     const chartData = [
-        { browser: "المدفوع", visitors: UsersPaid.length, fill: "var(--color-chrome)" },
-        { browser: "المستحق", visitors: UsersNotPaid.length, fill: "var(--color-safari)" },
+        { browser: "المدفوع", visitors: UsersPaid && UsersPaid.length, fill: "var(--color-chrome)" },
+        { browser: "المستحق", visitors: UsersNotPaid && UsersNotPaid.length, fill: "var(--color-safari)" },
     ]
     const chartConfig = {
         visitors: {
@@ -32,7 +32,7 @@ const ChartCircle = ({ UsersPaid, UsersNotPaid }) => {
     }
 
     const totalVisitors = React.useMemo(() => {
-        return UsersPaid.reduce((acc, curr) => acc + curr.price, 0)
+        return UsersPaid && UsersPaid.reduce((acc, curr) => acc + curr.price, 0)
     }, [UsersPaid])
 
     return (
