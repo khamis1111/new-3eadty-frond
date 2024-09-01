@@ -144,7 +144,7 @@ export function AppointmentTableHome({ getAllAppointment, allUser, allAppointmen
             cell: ({ row }) => (
                 <div className="capitalize">
                     {<Link to=
-                        {`/patientsDetails/${allUser.data && allUser.data?.filter(user => user.name === row.original.patientName)[0]._id}`}
+                        {`/patientsDetails/${allUser.data && allUser.data?.filter(user => user.name === row.original.patientName)[0]?._id}`}
                     >{row.getValue("patientName")}</Link>}
                 </div>
             ),

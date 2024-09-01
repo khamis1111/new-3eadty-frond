@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { FaFemale, FaMale } from 'react-icons/fa';
 import { TbUserEdit } from "react-icons/tb";
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { PostData } from '../..//api/Axios/usePostData';
 import { DeleteData } from '../../api/Axios/useDeleteData';
 import { EditData } from '../../api/Axios/useEditData';
@@ -45,6 +45,7 @@ import UserDataLoader from '../../components/PageLoader/UserDataLoader/UserDataL
 
 const PatientsDetails = ({ allAppointment }) => {
     const { id } = useParams() /* User ID */
+    const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
 
     // Get User //
@@ -61,6 +62,7 @@ const PatientsDetails = ({ allAppointment }) => {
             setLoading(false)
         }).catch((err) => {
             console.log(err)
+            navigate('/')
             notify(err.response.data.msg || err.response.data.message || err.response.data.errors[0].msg, 'error')
         })
     }
