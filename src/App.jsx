@@ -38,6 +38,8 @@ const App = () => {
       setLoading(true)
       setAllUser(res.data)
     }).catch(err => {
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
       console.log(err)
       notify(err.response.data.msg || err.response.data.message || err.response.data.errors[0].msg, 'error')
     })
@@ -50,6 +52,8 @@ const App = () => {
       setLoading(true)
       setAllAppointment(res.data)
     }).catch(err => {
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
       console.log(err)
       notify(err.response.data.msg || err.response.data.message || err.response.data.errors[0].msg, 'error')
     })
