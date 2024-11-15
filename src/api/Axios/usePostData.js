@@ -3,11 +3,11 @@ import baseUrl from "../../api/BaseUrl";
 export const PostDataImage = async (url, data) => {
   const config = {
     headers: {
-      "Content-Type": "text/plain",
-      Authorization: `Bearer public_12a1z6CG6pyg3ZLERYjwbjtekqVo`
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${localStorage.getItem("token")}`
     },
   };
-  const res = await baseUrl.post(url, data);
+  const res = await baseUrl.post(url, data, config);
   return res
 };
 

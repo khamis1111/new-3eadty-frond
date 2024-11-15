@@ -1,19 +1,21 @@
 import { useWindowSize } from "@uidotdev/usehooks";
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { GetDataToken } from "./api/Axios/useGetData";
 import MainSidebar from "./components/MainSidebar/MainSidebar";
 import PageLoader from "./components/PageLoader/PageLoader";
 import logoName from './images/logoWithName.png';
-import Appointments from "./pages/Appointments/Appointments";
-import LoginAdmin from "./pages/Auth/LoginAdmin";
-import Dashboard from "./pages/Dashboard/Dashboard";
-import Patients from "./pages/Patients/Patients";
-import PatientsDetails from "./pages/Patients/PatientsDetails";
 import ChangeDirectRoute from "./utils/Protect Routes/ChangeDirectRoute";
 import ProtectedRoute from "./utils/Protect Routes/ProtectedRoute";
 import notify from "./utils/useToastify";
+import HomeLoader from "./components/PageLoader/HomeLoader/HomeLoader";
+
+const Dashboard = lazy(() => import("./pages/Dashboard/Dashboard"))
+const Patients = lazy(() => import("./pages/Patients/Patients"))
+const PatientsDetails = lazy(() => import("./pages/Patients/PatientsDetails"))
+const Appointments = lazy(() => import("./pages/Appointments/Appointments"))
+const LoginAdmin = lazy(() => import("./pages/Auth/LoginAdmin"))
 
 const App = () => {
   const size = useWindowSize();
@@ -25,7 +27,7 @@ const App = () => {
     } else {
       setIsActive(false)
     }
-  }, [size])
+  }, [size.width])
 
   const [loading, setLoading] = useState(false)
   const [allUser, setAllUser] = useState([])
@@ -71,28 +73,32 @@ const App = () => {
 
   return (
     <div className="p-3" id={isActive || localStorage.getItem('user') === null ? 'collaps-menu' : ''}>
-      <BrowserRouter future={{ v7_startTransition: true }}>
+      <BrowserRouter>
         <PageLoader dataLoading={loading} />
         {
           localStorage.getItem('user') !== null && <MainSidebar isActive={isActive} setIsActive={setIsActive} />
         }
         <img src={logoName} alt="logo" className="fixed-image" />
         <div className="pages">
-          <Routes>
-            <Route element={<ChangeDirectRoute auth={isAdmin} type='admin' />}>
-              <Route path="/" element={<Dashboard getAllAppointment={getAllAppointment} allUser={allUser} allAppointment={allAppointment} loading={loading} />} />
-              <Route path="/appointments" element={<Appointments getAllAppointment={getAllAppointment} allUser={allUser} allAppointment={allAppointment} loading={loading} />} />
-              <Route path="/patients" element={<Patients getAllUsers={getAllUsers} allUser={allUser} loading={loading} />} />
-              <Route path="/patientsDetails/:id" element={<PatientsDetails allAppointment={allAppointment} />} />
-            </Route>
+          <Suspense fallback={<div className='page-loader'>
+            <HomeLoader />
+          </div>}>
+            <Routes>
+              <Route element={<ChangeDirectRoute auth={isAdmin} type='admin' />}>
+                <Route path="/" element={<Dashboard getAllAppointment={getAllAppointment} allUser={allUser} allAppointment={allAppointment} loading={loading} />} />
+                <Route path="/appointments" element={<Appointments getAllAppointment={getAllAppointment} allUser={allUser} allAppointment={allAppointment} loading={loading} />} />
+                <Route path="/patients" element={<Patients getAllUsers={getAllUsers} allUser={allUser} loading={loading} />} />
+                <Route path="/patientsDetails/:id" element={<PatientsDetails allAppointment={allAppointment} />} />
+              </Route>
 
-            <Route element={<ChangeDirectRoute auth={isLogged} type='login' />}>
-              <Route path="/login" element={<LoginAdmin />} />
-            </Route>
-          </Routes>
+              <Route element={<ChangeDirectRoute auth={isLogged} type='login' />}>
+                <Route path="/login" element={<LoginAdmin />} />
+              </Route>
+            </Routes>
+          </Suspense>
         </div>
         <ToastContainer
-          position="bottom-center"
+          position="bottom-right"
           theme="colored"
         />
       </BrowserRouter>
